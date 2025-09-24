@@ -43,3 +43,5 @@ entry("sbrk");
 entry("pause");
 entry("uptime");
 entry("ctime");
+entry("timtog");
+entry("getkt");

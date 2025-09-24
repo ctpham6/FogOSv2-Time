@@ -1,6 +1,13 @@
 #include "kernel/types.h"
 #include "user/user.h"
 
+void printtime(char *category, int raw_ms, int POSIX) {
+
+	if (raw_ms <=0) {
+		printf("%s\t%d", category, raw_ms);
+	
+}
+
 int main(int argc, char *argv[]) {
 
 	// A buffer
@@ -10,14 +17,19 @@ int main(int argc, char *argv[]) {
 	short POSIX = 0;
 	short arg_start_idx = 1;
 	if (argc == 1) {
-		printf("0 seconds bih\n");
+		timtog();
+		printf("real	0m0.000s\n");
+		printf("user	0m0.000s\n");
+		printf("sys 	0m0.000s\n");
 		return 1;
 	} else if (argc >= 2){
 		char *flag = "-p";
 		if (strcmp(flag, argv[1]) == 0) {
 			POSIX = 1;
 			if (argc == 2) {
-				printf("Still 0 bih\n");
+				printf("real	0.00s\n");
+				printf("user	0.00s\n");
+				printf("sys 	0.00s\n");
 				return 1;
 			} else {
 				arg_start_idx++;
@@ -29,6 +41,7 @@ int main(int argc, char *argv[]) {
 
 	int pid = fork();
 	int ret = 0;
+	timtog();
 	if (pid == 0) {
 		ret = exec(argv[arg_start_idx], &argv[arg_start_idx]);
 	} else {
@@ -54,5 +67,6 @@ int main(int argc, char *argv[]) {
 		}
 		ret = 1;
 	}
+	printf("%d\n", (getkt() % 1000000));
 	return ret;
 }

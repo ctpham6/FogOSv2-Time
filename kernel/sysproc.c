@@ -113,3 +113,22 @@ sys_ctime(void)
   uint32 second = *((uint32 *) (RTC + 0x4));
   return ((uint64) second << 32 | first) / 1000000;
 }
+
+uint64
+sys_timtog()
+{
+  struct proc *p = myproc();
+  p->timing = !p->timing;
+  if (p->timing) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
+uint64
+sys_getkt()
+{
+	struct proc *p = myproc();
+	return p->kern_time;
+}
