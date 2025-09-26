@@ -27,6 +27,7 @@ int uptime(void);
 int ctime(void);
 int timtog(void);
 int getkt(void);
+int getut(void);
 
 // ulib.c
 int stat(const char*, struct stat*);

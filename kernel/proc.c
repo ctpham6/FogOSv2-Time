@@ -171,6 +171,7 @@ freeproc(struct proc *p)
   p->state = UNUSED;
   p->timing = 0;
   p->kern_time = 0;
+  p->user_time = 0;
 }
 
 // Create a user page table for a given process, with no user memory,
@@ -484,7 +485,26 @@ sched(void)
     panic("sched interruptible");
 
   intena = mycpu()->intena;
+  uint64 before = 0;
+  uint64 after = 0;
+  uint32 first = 0;
+  uint32 second = 0;
+  if (p -> timing) {
+    first = *((uint32 *) RTC);
+    second = *((uint32 *) (RTC + 0x4));
+  	before = ((uint64) second << 32 | first) / 1000000;
+  }
   swtch(&p->context, &mycpu()->context);
+  if (p -> timing) {
+    first = *((uint32 *) RTC);
+    second = *((uint32 *) (RTC + 0x4));
+    after = ((uint64) second << 32 | first) / 1000000;
+  }
+  first = 0;
+  second = 0;
+  if (((after - before > 0)) && ((after - before) < 50000)) {
+  	p -> user_time += (after - before);
+  }
   mycpu()->intena = intena;
 }
 

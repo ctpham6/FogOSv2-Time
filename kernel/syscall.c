@@ -104,6 +104,7 @@ extern uint64 sys_close(void);
 extern uint64 sys_ctime(void);
 extern uint64 sys_timtog(void);
 extern uint64 sys_getkt(void);
+extern uint64 sys_getut(void);
 
 // An array mapping syscall numbers from syscall.h
 // to the function that handles the system call.
@@ -132,6 +133,7 @@ static uint64 (*syscalls[])(void) = {
 [SYS_ctime]   sys_ctime,
 [SYS_timtog]  sys_timtog,
 [SYS_getkt]   sys_getkt,
+[SYS_getut]   sys_getut,
 };
 
 void
@@ -145,13 +147,18 @@ syscall(void)
     // Use num to lookup the system call function for num, call it,
     // and store its return value in p->trapframe->a0
     uint64 before = 0;
+    uint64 after = 0;
     if (p->timing) {
-      sys_ctime();
       before = sys_ctime();
     }
+    
 	uint64 holder = syscalls[num]();
+	
 	if (p->timing) {
-	  p->kern_time += sys_ctime() - before;
+	  after = sys_ctime();
+	  if ((after - before) <= 500000) {
+	    p->kern_time += (after - before);
+	  }	
 	}
     p->trapframe->a0 = holder;
   } else {

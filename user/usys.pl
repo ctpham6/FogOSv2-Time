@@ -45,3 +45,4 @@ entry("uptime");
 entry("ctime");
 entry("timtog");
 entry("getkt");
+entry("getut");

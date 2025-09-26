@@ -106,4 +106,5 @@ struct proc {
   char name[16];               // Process name (debugging)
   short timing;				   // Toggles timing
   uint64 kern_time;            // Kernel Time Tracking
+  uint64 user_time;			   // User Time Tracking
 };

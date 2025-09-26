@@ -4,7 +4,26 @@
 void printtime(char *category, int raw_ms, int POSIX) {
 
 	if (raw_ms <=0) {
-		printf("%s\t%d", category, raw_ms);
+		if (POSIX) {
+			printf("%s\t0.00s\n", category);
+		} else {
+			printf("%s\t0m0.000s\n", category);
+		}
+	} else {
+		uint64 seconds = (raw_ms % 60000) / 1000;
+		if (POSIX) {
+			uint64 p_ms = (((raw_ms) % 1000) / 10);
+			printf("%s\t%ld.%lds\n", category, seconds, p_ms);
+		} else {
+			uint64 minutes = raw_ms / 60000;
+			uint64 ms = (raw_ms) % 1000;
+			if (ms < 100) {
+				printf("%s\t%ldm%ld.0%lds\n", category, minutes, seconds, ms);
+			} else {
+				printf("%s\t%ldm%ld.%lds\n", category, minutes, seconds, ms);
+			}
+		}
+	}
 	
 }
 
@@ -18,22 +37,21 @@ int main(int argc, char *argv[]) {
 	short arg_start_idx = 1;
 	if (argc == 1) {
 		timtog();
-		printf("real	0m0.000s\n");
-		printf("user	0m0.000s\n");
-		printf("sys 	0m0.000s\n");
+		printtime("real", 0, 0);
+		printtime("user", 0, 0);
+		printtime("sys", 0, 0);
 		return 1;
 	} else if (argc >= 2){
 		char *flag = "-p";
 		if (strcmp(flag, argv[1]) == 0) {
 			POSIX = 1;
 			if (argc == 2) {
-				printf("real	0.00s\n");
-				printf("user	0.00s\n");
-				printf("sys 	0.00s\n");
+				printtime("real", 0, 1);
+				printtime("user", 0, 1);
+				printtime("sys", 0, 1);
 				return 1;
 			} else {
 				arg_start_idx++;
-				printf("Ay you doing sumn DIF\n");
 			}
 			
 		}
@@ -48,25 +66,10 @@ int main(int argc, char *argv[]) {
 		wait(0);
 		uint64 time_after = ctime();
 		uint64 final_time = (time_after - time_before) % 1000000;
-		// printf("%ld\n", time_before);
-		// printf("%ld\n", time_after);
-		uint64 seconds = (final_time % 60000) / 1000;
-		if (POSIX == 1) {
-			//printf("Aight u POSIX-ing\n");
-			uint64 p_ms = (((final_time) % 1000) / 10);
-			printf("real	%ld.%lds\n", seconds, p_ms);
-			printf("user	%ld.%lds\n", seconds, p_ms);
-			printf("sys 	%ld.%lds\n", seconds, p_ms);
-		} else {
-			// printf("NO POSIX\n");
-			uint64 minutes = final_time / 60000;
-			uint64 ms = (final_time) % 1000;
-			printf("real	%ldm%ld.%lds\n", minutes, seconds, ms);
-			printf("user	%ldm%ld.%lds\n", minutes, seconds, ms);
-			printf("sys 	%ldm%ld.%lds\n", minutes, seconds, ms);
-		}
+		printtime("\nreal", final_time, POSIX);
+		printtime("user", getut(), POSIX);
+		printtime("sys", getkt(), POSIX);
 		ret = 1;
 	}
-	printf("%d\n", (getkt() % 1000000));
 	return ret;
 }
