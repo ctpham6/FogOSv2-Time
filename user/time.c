@@ -67,7 +67,9 @@ int main(int argc, char *argv[]) {
 		uint64 time_after = ctime();
 		uint64 final_time = (time_after - time_before) % 1000000;
 		printtime("\nreal", final_time, POSIX);
+		printf("ut: %ld\n", getut());
 		printtime("user", getut(), POSIX);
+		printf("kt: %ld\n", getkt());
 		printtime("sys", getkt(), POSIX);
 		ret = 1;
 	}

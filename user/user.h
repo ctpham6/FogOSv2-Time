@@ -24,10 +24,10 @@ int getpid(void);
 char* sys_sbrk(int,int);
 int pause(int);
 int uptime(void);
-int ctime(void);
+uint64 ctime(void);
 int timtog(void);
-int getkt(void);
-int getut(void);
+uint64 getkt(void);
+uint64 getut(void);
 
 // ulib.c
 int stat(const char*, struct stat*);

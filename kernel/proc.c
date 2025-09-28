@@ -446,7 +446,19 @@ scheduler(void)
         // before jumping back to us.
         p->state = RUNNING;
         c->proc = p;
+
+        uint64 before = 0;
+        uint64 after = 0;
+        if (p -> timing) {
+          before = sys_ctime();
+        }
         swtch(&c->context, &p->context);
+		if (p -> timing) {
+	      after = sys_ctime();
+	    }
+	    if (((after - before) > 0) && ((after - before) < 50000)) {
+	  	  p -> user_time += (after - before);
+	    }
 
         // Process is done running for now.
         // It should have changed its p->state before coming back.
@@ -485,26 +497,9 @@ sched(void)
     panic("sched interruptible");
 
   intena = mycpu()->intena;
-  uint64 before = 0;
-  uint64 after = 0;
-  uint32 first = 0;
-  uint32 second = 0;
-  if (p -> timing) {
-    first = *((uint32 *) RTC);
-    second = *((uint32 *) (RTC + 0x4));
-  	before = ((uint64) second << 32 | first) / 1000000;
-  }
+
   swtch(&p->context, &mycpu()->context);
-  if (p -> timing) {
-    first = *((uint32 *) RTC);
-    second = *((uint32 *) (RTC + 0x4));
-    after = ((uint64) second << 32 | first) / 1000000;
-  }
-  first = 0;
-  second = 0;
-  if (((after - before > 0)) && ((after - before) < 50000)) {
-  	p -> user_time += (after - before);
-  }
+  
   mycpu()->intena = intena;
 }
 

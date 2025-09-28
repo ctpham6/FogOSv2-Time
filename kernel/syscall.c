@@ -156,9 +156,9 @@ syscall(void)
 	
 	if (p->timing) {
 	  after = sys_ctime();
-	  if ((after - before) <= 500000) {
-	    p->kern_time += (after - before);
-	  }	
+	  if ((after - before) < 50000 && (after - before) > 0) {
+	  	p->kern_time += (after - before);
+	  }
 	}
     p->trapframe->a0 = holder;
   } else {
