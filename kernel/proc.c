@@ -365,10 +365,16 @@ kexit(int status)
   panic("zombie exit");
 }
 
+int
+kwait(uint64 addr)
+{
+	return (kwait2(addr, 0, 0));
+}
+
 // Wait for a child process to exit and return its pid.
 // Return -1 if this process has no children.
 int
-kwait(uint64 addr)
+kwait2(uint64 addr, uint64 utime, uint64 ktime)
 {
   struct proc *pp;
   int havekids, pid;
@@ -393,6 +399,16 @@ kwait(uint64 addr)
             release(&pp->lock);
             release(&wait_lock);
             return -1;
+          }
+          if (utime != 0 && copyout(p->pagetable, utime, (char *)&pp->user_time, sizeof(pp->user_time)) < 0) {
+          	release(&pp -> lock);
+          	release(&wait_lock);
+          	return -1;
+          }
+          if (ktime != 0 && copyout(p->pagetable, ktime, (char *)&pp->kern_time, sizeof(pp->kern_time)) < 0) {
+			release(&pp -> lock);
+          	release(&wait_lock);
+          	return -1;
           }
           freeproc(pp);
           release(&pp->lock);

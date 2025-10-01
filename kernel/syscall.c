@@ -105,6 +105,7 @@ extern uint64 sys_ctime(void);
 extern uint64 sys_timtog(void);
 extern uint64 sys_getkt(void);
 extern uint64 sys_getut(void);
+extern uint64 sys_wait2(void);
 
 // An array mapping syscall numbers from syscall.h
 // to the function that handles the system call.
@@ -134,6 +135,7 @@ static uint64 (*syscalls[])(void) = {
 [SYS_timtog]  sys_timtog,
 [SYS_getkt]   sys_getkt,
 [SYS_getut]   sys_getut,
+[SYS_wait2]   sys_wait2,
 };
 
 void

@@ -44,7 +44,6 @@ int main(int argc, char *argv[]) {
 	short POSIX = 0;
 	short arg_start_idx = 1;
 	if (argc == 1) {
-		timtog();
 		printtime("real", 0, 0);
 		printtime("user", 0, 0);
 		printtime("sys", 0, 0);
@@ -67,19 +66,20 @@ int main(int argc, char *argv[]) {
 
 	int pid = fork();
 	int ret = 0;
-	timtog();
 	if (pid == 0) {
+		timtog();
 		ret = exec(argv[arg_start_idx], &argv[arg_start_idx]);
 	} else {
-		wait(0);
+		uint64 utime, kerntime;
+		wait2(0, &utime, &kerntime);
 		uint64 time_after = ctime();
 		uint64 final_time = (time_after - time_before);
-		// printf("\nrt: %ld\n", final_time);
+		printf("\nrt: %ld\n", final_time);
 		printtime("real", final_time, POSIX);
-		// printf("ut: %ld\n", getut(pid));
-		printtime("user", getut(pid), POSIX);
-		// printf("kt: %ld\n", getkt(pid));
-		printtime("sys", getkt(pid), POSIX);
+		printf("ut: %ld\n", utime);
+		printtime("user", utime, POSIX);
+		printf("kt: %ld\n", kerntime);
+		printtime("sys", kerntime, POSIX);
 		ret = 1;
 	}
 	return ret;
