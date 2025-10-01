@@ -156,7 +156,8 @@ syscall(void)
 	
 	if (p->timing) {
 	  after = sys_ctime();
-	  if ((after - before) < 50000 && (after - before) > 0) {
+	  if ((after - before) > 0) {
+	  	// printf("AFTER-BEFORE: %ld\n", (after-before));
 	  	p->kern_time += (after - before);
 	  }
 	}

@@ -1,22 +1,26 @@
 #include "kernel/types.h"
 #include "user/user.h"
 
-void printtime(char *category, int raw_ms, int POSIX) {
+void printtime(char *category, int raw_ns, int POSIX) {
 
-	if (raw_ms <=0) {
+	if (raw_ns <=0) {
 		if (POSIX) {
 			printf("%s\t0.00s\n", category);
 		} else {
 			printf("%s\t0m0.000s\n", category);
 		}
 	} else {
-		uint64 seconds = (raw_ms % 60000) / 1000;
+		uint64 seconds = (raw_ns % 60000000000) / 1000000000;
 		if (POSIX) {
-			uint64 p_ms = (((raw_ms) % 1000) / 10);
-			printf("%s\t%ld.%lds\n", category, seconds, p_ms);
+			uint64 p_ms = (((raw_ns) % 60000000000) / 100000000);
+			if (p_ms < 10) {
+				printf("%s\t%ld.0%lds\n", category, seconds, p_ms);
+			} else {
+				printf("%s\t%ld.%lds\n", category, seconds, p_ms);
+			}
 		} else {
-			uint64 minutes = raw_ms / 60000;
-			uint64 ms = (raw_ms) % 1000;
+			uint64 minutes = raw_ns / 60000000000;
+			uint64 ms = (raw_ns % 60000000000) / 10000000;
 			if (ms < 100) {
 				printf("%s\t%ldm%ld.0%lds\n", category, minutes, seconds, ms);
 			} else {
@@ -31,6 +35,10 @@ int main(int argc, char *argv[]) {
 
 	// A buffer
 	ctime();
+
+	printf("%ld\n", ctime());
+	printf("%ld\n", ctime());
+	printf("%ld\n", ctime());
 
 	uint64 time_before = ctime();
 	short POSIX = 0;
@@ -65,12 +73,13 @@ int main(int argc, char *argv[]) {
 	} else {
 		wait(0);
 		uint64 time_after = ctime();
-		uint64 final_time = (time_after - time_before) % 1000000;
-		printtime("\nreal", final_time, POSIX);
-		printf("ut: %ld\n", getut());
-		printtime("user", getut(), POSIX);
-		printf("kt: %ld\n", getkt());
-		printtime("sys", getkt(), POSIX);
+		uint64 final_time = (time_after - time_before);
+		// printf("\nrt: %ld\n", final_time);
+		printtime("real", final_time, POSIX);
+		// printf("ut: %ld\n", getut(pid));
+		printtime("user", getut(pid), POSIX);
+		// printf("kt: %ld\n", getkt(pid));
+		printtime("sys", getkt(pid), POSIX);
 		ret = 1;
 	}
 	return ret;

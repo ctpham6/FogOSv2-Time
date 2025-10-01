@@ -456,7 +456,7 @@ scheduler(void)
 		if (p -> timing) {
 	      after = sys_ctime();
 	    }
-	    if (((after - before) > 0) && ((after - before) < 50000)) {
+	    if ((after - before) > 0) {
 	  	  p -> user_time += (after - before);
 	    }
 
@@ -701,4 +701,20 @@ procdump(void)
     printf("%d %s %s", p->pid, state, p->name);
     printf("\n");
   }
+}
+
+struct proc *
+lookup_pid(int target_pid) {
+
+	printf("IM TRYING TO FIND: %d\n", target_pid);
+	for (int i = 0; i < NPROC; i++) {
+		printf("proc[%d].pid IS: %d\n", i, proc[i].pid);
+		if (proc[i].pid == target_pid) {
+			return(proc + i);
+		}
+	}
+	// Didn't find the proc
+	printf("Didnt find the proc heh\n");
+	return(0);
+	
 }

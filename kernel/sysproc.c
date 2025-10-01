@@ -111,7 +111,7 @@ sys_ctime(void)
 {
   uint32 first = *((uint32 *) RTC);
   uint32 second = *((uint32 *) (RTC + 0x4));
-  return ((uint64) second << 32 | first) / 1000000;
+  return ((uint64) second << 32 | first);
 }
 
 uint64
@@ -127,15 +127,25 @@ sys_timtog()
 }
 
 uint64
-sys_getkt()
+sys_getkt(int target_pid)
 {
-	struct proc *p = myproc();
-	return p -> kern_time;
+	argint(0, &target_pid);
+	struct proc *p = lookup_pid(target_pid);
+	if (p) {
+		return p -> kern_time;	
+	} else {
+		return(0);
+	}
 }
 
 uint64
-sys_getut()
+sys_getut(int target_pid)
 {
-	struct proc *p = myproc();
-	return p -> user_time;
+	argint(0, &target_pid);
+	struct proc *p = lookup_pid(target_pid);
+	if (p) {
+		return p -> user_time;
+	} else {
+		return(0);
+	}
 }
