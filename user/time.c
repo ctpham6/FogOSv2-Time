@@ -10,21 +10,26 @@ void printtime(char *category, int raw_ns, int POSIX) {
 			printf("%s\t0m0.000s\n", category);
 		}
 	} else {
-		uint64 seconds = (raw_ns % 60000000000) / 1000000000;
+		uint64 seconds = ((raw_ns % 60000000000) / 1000000000);
+		// printf("SECONDS: %ld\n", seconds);
 		if (POSIX) {
-			uint64 p_ms = (((raw_ns) % 60000000000) / 100000000);
+			uint64 p_ms = ((((raw_ns) % 60000000000) % 1000000000) / 10000000);
 			if (p_ms < 10) {
-				printf("%s\t%ld.0%lds\n", category, seconds, p_ms);
+				printf("%s\t%lu.0%lus\n", category, seconds, p_ms);
 			} else {
-				printf("%s\t%ld.%lds\n", category, seconds, p_ms);
+				printf("%s\t%lu.%lus\n", category, seconds, p_ms);
 			}
 		} else {
 			uint64 minutes = raw_ns / 60000000000;
-			uint64 ms = (raw_ns % 60000000000) / 10000000;
+			uint64 ms = ((raw_ns % 60000000000) % 1000000000) / 1000000;
 			if (ms < 100) {
-				printf("%s\t%ldm%ld.0%lds\n", category, minutes, seconds, ms);
+				if (ms > 9) {
+					printf("%s\t%lum%lu.0%lus\n", category, minutes, seconds, ms);
+				} else {
+					printf("%s\t%lum%lu.00%lus\n", category, minutes, seconds, ms);	
+				}
 			} else {
-				printf("%s\t%ldm%ld.%lds\n", category, minutes, seconds, ms);
+				printf("%s\t%lum%lu.%lus\n", category, minutes, seconds, ms);
 			}
 		}
 	}
@@ -35,12 +40,13 @@ int main(int argc, char *argv[]) {
 
 	// A buffer
 	ctime();
+	ctime();
+	ctime();
 
-	printf("%ld\n", ctime());
-	printf("%ld\n", ctime());
-	printf("%ld\n", ctime());
+	// printf("%ld\n", ctime());
+	// printf("%ld\n", ctime());
+	// printf("%ld\n", ctime());
 
-	uint64 time_before = ctime();
 	short POSIX = 0;
 	short arg_start_idx = 1;
 	if (argc == 1) {
@@ -64,21 +70,24 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
+	uint64 time_before = 0;
 	int pid = fork();
 	int ret = 0;
 	if (pid == 0) {
 		timtog();
+		time_before = ctime();
 		ret = exec(argv[arg_start_idx], &argv[arg_start_idx]);
 	} else {
 		uint64 utime, kerntime;
 		wait2(0, &utime, &kerntime);
 		uint64 time_after = ctime();
+		// printf("after: %ld\n", time_after);
 		uint64 final_time = (time_after - time_before);
-		printf("\nrt: %ld\n", final_time);
+		printf("\nrt: %lu\n", final_time);
 		printtime("real", final_time, POSIX);
-		printf("ut: %ld\n", utime);
+		printf("ut: %lu\n", utime);
 		printtime("user", utime, POSIX);
-		printf("kt: %ld\n", kerntime);
+		printf("kt: %lu\n", kerntime);
 		printtime("sys", kerntime, POSIX);
 		ret = 1;
 	}
