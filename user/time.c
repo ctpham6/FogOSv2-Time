@@ -10,7 +10,7 @@ void printtime(char *category, int raw, int POSIX) {
 			printf("%s\t0m0.000s\n", category);
 		}
 	} else {
-		uint64 seconds = ((raw % 100000000) / 1000) % 60;
+		uint64 seconds = ((raw % 1000000000) / 1000) % 60;
 		// printf("SECONDS: %ld\n", seconds);
 		if (POSIX) {
 			uint64 p_ms = (raw % 1000) / 10;
@@ -20,7 +20,7 @@ void printtime(char *category, int raw, int POSIX) {
 				printf("%s\t%lu.%lus\n", category, seconds, p_ms);
 			}
 		} else {
-			uint64 minutes = ((raw % 100000000) / 1000) / 60;
+			uint64 minutes = ((raw % 1000000000) / 1000) / 60;
 			uint64 ms = (raw % 1000);
 			if (ms < 100) {
 				if (ms > 9) {
