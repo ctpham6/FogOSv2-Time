@@ -141,29 +141,3 @@ sys_timtog()
     return 0;
   }
 }
-
-uint64
-sys_getkt(int target_pid)
-{
-	// argint(0, &target_pid);
-	// struct proc *p = lookup_pid(target_pid);
-	// if (p) {
-	// 	return p -> kern_time;	
-	// } else {
-	// 	return(0);
-	// }
-	return 0;
-}
-
-uint64
-sys_getut(int target_pid)
-{
-	// argint(0, &target_pid);
-	// struct proc *p = lookup_pid(target_pid);
-	// if (p) {
-	// 	return p -> user_time;
-	// } else {
-	// 	return(0);
-	// }
-	return 0;
-}
