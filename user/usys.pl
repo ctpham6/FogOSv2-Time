@@ -44,6 +44,4 @@ entry("pause");
 entry("uptime");
 entry("ctime");
 entry("timtog");
-entry("getkt");
-entry("getut");
 entry("wait2");

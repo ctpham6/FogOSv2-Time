@@ -103,8 +103,6 @@ extern uint64 sys_mkdir(void);
 extern uint64 sys_close(void);
 extern uint64 sys_ctime(void);
 extern uint64 sys_timtog(void);
-extern uint64 sys_getkt(void);
-extern uint64 sys_getut(void);
 extern uint64 sys_wait2(void);
 
 // An array mapping syscall numbers from syscall.h
@@ -133,8 +131,6 @@ static uint64 (*syscalls[])(void) = {
 [SYS_close]   sys_close,
 [SYS_ctime]   sys_ctime,
 [SYS_timtog]  sys_timtog,
-[SYS_getkt]   sys_getkt,
-[SYS_getut]   sys_getut,
 [SYS_wait2]   sys_wait2,
 };
 

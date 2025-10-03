@@ -27,8 +27,6 @@ int pause(int);
 int uptime(void);
 uint64 ctime(void);
 int timtog(void);
-uint64 getkt(uint64 target_pid);
-uint64 getut(uint64 target_pid);
 
 // ulib.c
 int stat(const char*, struct stat*);
