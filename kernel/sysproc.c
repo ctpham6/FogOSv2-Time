@@ -123,7 +123,11 @@ sys_ctime(void)
   uint32 second = *((uint32 *) (RTC + 0x4));
   uint32 first = *((uint32 *) (RTC));
   // printf("%ld\n", ((uint64) second << 32 | first) / 1000000);
-  return (((uint64) second << 32 | first) / 1000000);
+  if (myproc() -> timing) {
+  	return (((uint64) second << 32 | first) / 1000000);
+  } else {
+  	return ((uint64) second << 32 | first);
+  }
 }
 
 uint64

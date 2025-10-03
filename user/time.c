@@ -10,26 +10,26 @@ void printtime(char *category, int raw, int POSIX) {
 			printf("%s\t0m0.000s\n", category);
 		}
 	} else {
-		uint64 seconds = ((raw % 1000000000) / 1000) % 60;
+		uint8 seconds = ((raw % 1000000000) / 1000) % 60;
 		// printf("SECONDS: %ld\n", seconds);
 		if (POSIX) {
-			uint64 p_ms = (raw % 1000) / 10;
+			uint8 p_ms = (raw % 1000) / 10;
 			if (p_ms < 10) {
-				printf("%s\t%lu.0%lus\n", category, seconds, p_ms);
+				printf("%s\t%d.0%ds\n", category, seconds, p_ms);
 			} else {
-				printf("%s\t%lu.%lus\n", category, seconds, p_ms);
+				printf("%s\t%d.%ds\n", category, seconds, p_ms);
 			}
 		} else {
 			uint64 minutes = ((raw % 1000000000) / 1000) / 60;
-			uint64 ms = (raw % 1000);
+			uint16 ms = (raw % 1000);
 			if (ms < 100) {
 				if (ms > 9) {
-					printf("%s\t%lum%lu.0%lus\n", category, minutes, seconds, ms);
+					printf("%s\t%lum%d.0%ds\n", category, minutes, seconds, ms);
 				} else {
-					printf("%s\t%lum%lu.00%lus\n", category, minutes, seconds, ms);	
+					printf("%s\t%lum%d.00%ds\n", category, minutes, seconds, ms);	
 				}
 			} else {
-				printf("%s\t%lum%lu.%lus\n", category, minutes, seconds, ms);
+				printf("%s\t%lum%d.%ds\n", category, minutes, seconds, ms);
 			}
 		}
 	}
@@ -66,6 +66,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
+	timtog();
 	uint64 time_before = ctime();
 	int pid = fork();
 	int ret = 0;
