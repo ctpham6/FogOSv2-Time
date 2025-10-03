@@ -132,7 +132,7 @@ UPROGS=\
 	$U/_ln\
 	$U/_ls\
 	$U/_mkdir\
-	$U/_pause\
+	$U/_ploop\
 	$U/_rm\
 	$U/_sh\
 	$U/_stressfs\
