@@ -158,7 +158,7 @@ syscall(void)
 	
 	if (p->timing && before != 0) {
 	  after = sys_ctime();
-	  if ((after - before) > 0) {
+	  if (((after - before) > 0) && (after > before)) {
 	  	// printf("AFTER-BEFORE: %ld\n", (after-before));
 	  	p->kern_time += (after - before);
 	  }

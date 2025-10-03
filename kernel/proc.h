@@ -107,4 +107,5 @@ struct proc {
   short timing;				   // Toggles timing
   uint64 kern_time;            // Kernel Time Tracking
   uint64 user_time;			   // User Time Tracking
+  uint64 real_time;			   // Real Time Tracking
 };

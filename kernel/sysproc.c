@@ -120,9 +120,10 @@ sys_uptime(void)
 uint64
 sys_ctime(void)
 {
-  volatile uint32 first = *((uint32 *) RTC);
-  volatile uint32 second = *((uint32 *) (RTC + 0x4));
-  return ((uint64) second << 32 | first);
+  uint32 second = *((uint32 *) (RTC + 0x4));
+  uint32 first = *((uint32 *) (RTC));
+  // printf("%ld\n", ((uint64) second << 32 | first) / 1000000);
+  return (((uint64) second << 32 | first) / 1000000);
 }
 
 uint64

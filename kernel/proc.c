@@ -470,9 +470,9 @@ scheduler(void)
         }
         swtch(&c->context, &p->context);
 		if (p -> timing && before != 0) {
-	      after = sys_ctime();
+		  after = sys_ctime();
 	    }
-	    if (after - before) {
+	    if ((after - before) && (after > before)) {
 	  	  p -> user_time += (after - before);
 	    }
 
