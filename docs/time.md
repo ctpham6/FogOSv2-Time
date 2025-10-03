@@ -19,11 +19,15 @@ It should print out the real, user, and sys time in that order. Real time (real)
 #### Examples
 ##### Default
 real	0m0.000s
+
 user	0m0.000s
+
 sys		0m0.000s
 ##### POSIX (-p)
 real	0.00
+
 user	0.00
+
 sys		0.00
 #### Note
 Kernel Space Time + User Space Time does NOT equate to Real Time and, by extension, any equivalent algebraic expressions of that is also not true
