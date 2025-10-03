@@ -70,7 +70,8 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	uint64 time_before = 0;
+	timtog();
+	uint64 time_before = ctime();
 	int pid = fork();
 	int ret = 0;
 	if (pid == 0) {
@@ -81,7 +82,10 @@ int main(int argc, char *argv[]) {
 		uint64 utime, kerntime;
 		wait2(0, &utime, &kerntime);
 		uint64 time_after = ctime();
+		// printf("before: %ld\n", time_before);
 		// printf("after: %ld\n", time_after);
+		// printf("kern: %ld\n", kerntime);
+		// printf("user: %ld\n", utime);
 		uint64 final_time = (time_after - time_before);
 		printf("\nrt: %lu\n", final_time);
 		printtime("real", final_time, POSIX);

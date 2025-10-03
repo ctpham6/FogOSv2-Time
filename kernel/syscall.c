@@ -156,7 +156,7 @@ syscall(void)
     
 	uint64 holder = syscalls[num]();
 	
-	if (p->timing) {
+	if (p->timing && before != 0) {
 	  after = sys_ctime();
 	  if ((after - before) > 0) {
 	  	// printf("AFTER-BEFORE: %ld\n", (after-before));

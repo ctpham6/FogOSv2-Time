@@ -6,6 +6,7 @@ int main() {
 	printf("Looping...\n");
 	uint64 a = 0;
 	for (int i = 0; i < 1500000000; i++) {
+		printf("ctime: %ld\n", ctime());
 		a++;
 	}
 	printf("Done!\n");
